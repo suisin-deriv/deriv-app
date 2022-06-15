@@ -40,7 +40,7 @@ describe('<UploadComplete />', () => {
 
         expect(screen.getByText(message)).toBeInTheDocument();
         expect(screen.getByText(text)).toBeInTheDocument();
-        expect(screen.getByTestId(/dt_mocked_icon/)).toBeInTheDocument();
+        expect(screen.getByTestId(/dt_mocked_icon/i)).toBeInTheDocument();
     });
 
     it('should not show redirect_button if it is not passed', () => {
