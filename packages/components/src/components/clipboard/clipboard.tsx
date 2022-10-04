@@ -9,7 +9,7 @@ type TClipboard = {
     icon: string;
     info_message: string;
     success_message: string;
-    className: string;
+    className?: string;
     popoverClassName: string;
     popoverAlignment: 'top' | 'right' | 'bottom' | 'left';
     popover_props: any;
