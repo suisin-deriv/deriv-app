@@ -56,3 +56,5 @@ export const formatInput = (example_format: string, input_string: string, separa
 
 export const getCharCount = (target_string: string, char: string | RegExp) =>
     target_string.match(new RegExp(char, 'g'))?.length || 0;
+
+export const capitalizeFirstLetter = string => string && string[0].toUpperCase() + string.slice(1);
