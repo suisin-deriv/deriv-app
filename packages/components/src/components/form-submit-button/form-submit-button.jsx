@@ -20,6 +20,7 @@ const FormSubmitButton = ({
 }) => {
     return (
         <div
+            data-testid='dt_form_submit_button'
             className={classNames('dc-form-submit-button', className, {
                 'dc-form-submit-button--absolute': is_absolute,
                 'dc-form-submit-button--center': !!is_center,

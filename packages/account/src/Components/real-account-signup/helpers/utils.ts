@@ -1,12 +1,14 @@
+import { FormikValues } from 'formik';
+
 /**
  * Takes validation result of a form, sets warnings on component's state and pass errors down to the form
  *
  * @param {object} values - object containing form field values and validations
  * @return {object} object containing errors and warnings
  */
-function splitValidationResultTypes(values) {
-    const warnings = {};
-    const errors = {};
+function splitValidationResultTypes(values: FormikValues) {
+    const warnings: { [key: string]: unknown } = {};
+    const errors: { [key: string]: unknown } = {};
     Object.keys(values).forEach(field => {
         const item = values[field];
         if (Array.isArray(item)) {

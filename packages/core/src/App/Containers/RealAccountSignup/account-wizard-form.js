@@ -10,7 +10,7 @@ import {
     ProofOfIdentityFormOnSignup,
 } from '@deriv/account';
 import CurrencySelector from './currency-selector.jsx';
-import FinancialDetails from './financial-details.jsx';
+import FinancialDetails from './financial-details';
 import AddressDetails from './address-details.jsx';
 
 const shouldShowFinancialDetails = ({ real_account_signup_target }) => real_account_signup_target === 'maltainvest';
