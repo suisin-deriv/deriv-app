@@ -32,7 +32,7 @@ const IdvDocumentSubmit = ({
     selected_country,
     is_from_external,
 }: Partial<FormikProps<FormikValues>> & TIdvDocumentSubmit) => {
-    const [document_list, setDocumentList] = React.useState([]);
+    const [document_list, setDocumentList] = React.useState<object[]>([]);
     const [document_image, setDocumentImage] = React.useState(null);
     const [is_input_disable, setInputDisable] = React.useState(true);
     const [is_doc_selected, setDocSelected] = React.useState(false);
@@ -287,8 +287,8 @@ const IdvDocumentSubmit = ({
                                             onChange={handleChange}
                                             onKeyUp={(e: FormikValues) => {
                                                 const { example_format } = values?.document_type;
-                                                const current_input = example_format.includes('-')
-                                                    ? formatInput(example_format, current_input || e.target.value, '-')
+                                                const current_input: string = example_format.includes('-')
+                                                    ? formatInput(example_format, e.target.value, '-')
                                                     : e.target.value;
                                                 if (typeof setFieldValue === 'function') {
                                                     setFieldValue('document_number', current_input, true);
