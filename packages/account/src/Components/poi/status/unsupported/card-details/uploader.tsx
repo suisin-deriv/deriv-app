@@ -1,7 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import PropTypes, { string } from 'prop-types';
-import { Field } from 'formik';
+import { Field, FormikProps, FormikValues } from 'formik';
 import { localize } from '@deriv/translations';
 import { isMobile, supported_filetypes, max_document_size } from '@deriv/shared';
 import { Button, Icon, Text, FileDropzone } from '@deriv/components';
@@ -13,8 +12,22 @@ const DROPZONE_ERRORS = {
     'too-many-files': localize('Please select one file only'),
     GENERAL: localize('Sorry, an error occured. Please select another file.'),
 };
+type TDROPZONE_ERRORS = Readonly<{
+    'file-too-large': string;
+    'file-invalid-type': string;
+    'too-many-files': string;
+    GENERAL: string;
+}>;
 
-const Message = ({ data, open }) => (
+type TUploader = {
+    data: FormikValues;
+    value: FormikValues;
+    is_full: boolean;
+    has_frame: boolean;
+    onChange: (e: unknown) => void;
+};
+
+const Message = ({ data, open }: FormikValues) => (
     <div className={`${ROOT_CLASS}__uploader-details`}>
         <Icon className={`${ROOT_CLASS}__uploader-icon`} icon={data.icon} size={236} />
         <Text as='p' size='xs' color='general' align='center'>
@@ -29,8 +42,14 @@ const Message = ({ data, open }) => (
     </div>
 );
 
-const Preview = ({ data, setFieldValue, value, has_frame, handleChange }) => {
-    const [background_url, setBackgroundUrl] = React.useState();
+const Preview = ({
+    data,
+    setFieldValue,
+    value,
+    has_frame,
+    handleChange,
+}: Partial<FormikProps<FormikValues>> & TUploader) => {
+    const [background_url, setBackgroundUrl] = React.useState<string>();
 
     React.useEffect(() => {
         setBackgroundUrl(value.file ? URL.createObjectURL(value.file) : '');
@@ -56,7 +75,11 @@ const Preview = ({ data, setFieldValue, value, has_frame, handleChange }) => {
                 <Icon
                     icon='IcCloseCircle'
                     className={`${ROOT_CLASS}__uploader-remove`}
-                    onClick={() => handleChange(null, setFieldValue)}
+                    onClick={() => {
+                        if (handleChange && typeof handleChange === 'function') {
+                            handleChange(null, setFieldValue);
+                        }
+                    }}
                     size={16}
                 />
             </div>
@@ -67,36 +90,38 @@ const Preview = ({ data, setFieldValue, value, has_frame, handleChange }) => {
     );
 };
 
-const Uploader = ({ data, value, is_full, onChange, has_frame }) => {
-    const [image, setImage] = React.useState();
+const Uploader = ({ data, value, is_full, onChange, has_frame }: TUploader) => {
+    const [image, setImage] = React.useState<{ errors?: [] }>();
 
     React.useEffect(() => {
         setImage(value);
     }, [value]);
 
-    const handleChange = (file, setFieldValue) => {
+    const handleChange = (file: object, setFieldValue: FormikProps<FormikValues>['setFieldValue']) => {
         if (onChange && typeof onChange === 'function') {
             onChange(file);
         }
         setFieldValue(data.name, file);
     };
 
-    const handleAccept = (files, setFieldValue) => {
+    const handleAccept = (files: object[], setFieldValue: () => void) => {
         const file = { file: files[0], errors: [], ...data };
         handleChange(file, setFieldValue);
     };
 
-    const handleReject = (files, setFieldValue) => {
-        const errors = files[0].errors.map(error =>
-            DROPZONE_ERRORS[error.code] ? DROPZONE_ERRORS[error.code] : DROPZONE_ERRORS.GENERAL
+    const handleReject = (files: Array<{ errors?: [] }>, setFieldValue: () => void) => {
+        const errors = files[0].errors?.map((error: { code: string }) =>
+            DROPZONE_ERRORS[error.code as keyof TDROPZONE_ERRORS]
+                ? DROPZONE_ERRORS[error.code as keyof TDROPZONE_ERRORS]
+                : DROPZONE_ERRORS.GENERAL
         );
         const file = { ...files[0], errors, ...data };
         handleChange(file, setFieldValue);
     };
 
-    const ValidationErrorMessage = open => (
+    const ValidationErrorMessage = (open: () => void) => (
         <div className={`${ROOT_CLASS}__uploader-details`}>
-            {image.errors.map((error, index) => (
+            {image?.errors?.map((error: string, index: number) => (
                 <Text key={index} as='p' size='xs' color='secondary' align='center'>
                     {error}
                 </Text>
@@ -112,7 +137,7 @@ const Uploader = ({ data, value, is_full, onChange, has_frame }) => {
 
     return (
         <Field name={data.name}>
-            {({ form: { setFieldValue } }) => (
+            {({ form: { setFieldValue } }: FormikValues) => (
                 <div
                     className={classNames(`${ROOT_CLASS}__uploader`, {
                         [`${ROOT_CLASS}__uploader--full`]: is_full,
@@ -124,7 +149,7 @@ const Uploader = ({ data, value, is_full, onChange, has_frame }) => {
                         filename_limit={32}
                         hover_message={localize('Drop files here..')}
                         max_size={max_document_size}
-                        message={open => <Message open={open} data={data} />}
+                        message={(open: FormikValues) => <Message open={open} data={data} />}
                         preview_single={
                             image && (
                                 <Preview
@@ -137,8 +162,8 @@ const Uploader = ({ data, value, is_full, onChange, has_frame }) => {
                             )
                         }
                         multiple={false}
-                        onDropAccepted={files => handleAccept(files, setFieldValue)}
-                        onDropRejected={files => handleReject(files, setFieldValue)}
+                        onDropAccepted={(files: object[]) => handleAccept(files, setFieldValue)}
+                        onDropRejected={(files: Array<object>) => handleReject(files, setFieldValue)}
                         validation_error_message={value?.errors?.length ? ValidationErrorMessage : null}
                         noClick
                         value={image ? [image] : []}
@@ -149,11 +174,4 @@ const Uploader = ({ data, value, is_full, onChange, has_frame }) => {
     );
 };
 
-Uploader.propTypes = {
-    data: PropTypes.object,
-    value: PropTypes.oneOfType([PropTypes.object, PropTypes, string]),
-    is_full: PropTypes.bool,
-    has_frame: PropTypes.bool,
-    onChange: PropTypes.func,
-};
 export default Uploader;
