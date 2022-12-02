@@ -107,6 +107,8 @@ const CFDAccountCardAction = ({
     type,
     platform,
     title,
+    real_account_creation_unlock_date,
+    setShouldShowCooldownModal,
 }: TCFDAccountCardActionProps) => {
     if (
         is_virtual &&
@@ -146,7 +148,13 @@ const CFDAccountCardAction = ({
     return (
         <Button
             className='cfd-account-card__account-selection'
-            onClick={onSelectAccount}
+            onClick={() => {
+                if (real_account_creation_unlock_date) {
+                    setShouldShowCooldownModal(true);
+                } else {
+                    onSelectAccount();
+                }
+            }}
             type='button'
             is_disabled={is_disabled}
             primary={is_button_primary}
@@ -187,6 +195,8 @@ const CFDAccountCardComponent = ({
     toggleMT5TradeModal,
     toggleShouldShowRealAccountsList,
     type,
+    real_account_creation_unlock_date,
+    setShouldShowCooldownModal,
 }: TCFDAccountCard) => {
     const existing_data = existing_accounts_data?.length ? existing_accounts_data?.[0] : existing_accounts_data;
     const all_svg_acc: DetailsOfEachMT5Loginid[] = [];
@@ -519,16 +529,17 @@ const CFDAccountCardComponent = ({
                                                     show_currency
                                                 />
                                             </Text>
-                                            {checkMultipleSvgAcc()?.length > 1 && acc.landing_company_short === 'svg' && (
-                                                <Text
-                                                    className='cfd-account-card__balance--region'
-                                                    color='colored-background'
-                                                    size='xxxs'
-                                                    weight='bold'
-                                                >
-                                                    {getServerName(acc)}
-                                                </Text>
-                                            )}
+                                            {checkMultipleSvgAcc()?.length > 1 &&
+                                                acc.landing_company_short === 'svg' && (
+                                                    <Text
+                                                        className='cfd-account-card__balance--region'
+                                                        color='colored-background'
+                                                        size='xxxs'
+                                                        weight='bold'
+                                                    >
+                                                        {getServerName(acc)}
+                                                    </Text>
+                                                )}
                                         </div>
                                     )}
                                     <div className='cfd-account-card__manage--mt5'>
@@ -663,6 +674,8 @@ const CFDAccountCardComponent = ({
                                 type={type}
                                 platform={platform}
                                 title={title}
+                                real_account_creation_unlock_date={real_account_creation_unlock_date}
+                                setShouldShowCooldownModal={setShouldShowCooldownModal}
                             />
                         )}
                     </div>
