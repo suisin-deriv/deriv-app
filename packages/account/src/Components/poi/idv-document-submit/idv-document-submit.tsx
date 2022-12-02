@@ -9,6 +9,11 @@ import { getDocumentData, getRegex } from './utils';
 import BackButtonIcon from 'Assets/ic-poi-back-btn.svg';
 import DocumentSubmitLogo from 'Assets/ic-document-submit-icon.svg';
 
+type TDocumentsSupported = {
+    display_name: string;
+    format: string;
+};
+
 type TIdvDocumentSubmit = {
     handleBack: () => void;
     handleViewComplete: () => void;
@@ -18,7 +23,7 @@ type TIdvDocumentSubmit = {
             services: {
                 idv: {
                     has_visual_sample: boolean;
-                    documents_supported: string;
+                    documents_supported: TDocumentsSupported;
                 };
             };
         };
@@ -55,7 +60,7 @@ const IdvDocumentSubmit = ({
 
         setDocumentList(
             filtered_documents.map(key => {
-                const { display_name, format } = document_data[key];
+                const { display_name, format } = document_data[key as keyof TDocumentsSupported];
                 const { new_display_name, example_format, sample_image } = getDocumentData(country_code, key) || {};
 
                 return {
@@ -171,7 +176,6 @@ const IdvDocumentSubmit = ({
                 | 'errors'
                 | 'handleBlur'
                 | 'handleChange'
-                | 'handleSubmit'
                 | 'isSubmitting'
                 | 'isValid'
                 | 'setFieldValue'
