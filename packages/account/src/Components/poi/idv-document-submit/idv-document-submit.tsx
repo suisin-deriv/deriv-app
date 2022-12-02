@@ -9,11 +9,6 @@ import { getDocumentData, getRegex } from './utils';
 import BackButtonIcon from 'Assets/ic-poi-back-btn.svg';
 import DocumentSubmitLogo from 'Assets/ic-document-submit-icon.svg';
 
-type TDocumentsSupported = {
-    display_name: string;
-    format: string;
-};
-
 type TIdvDocumentSubmit = {
     handleBack: () => void;
     handleViewComplete: () => void;
@@ -23,12 +18,18 @@ type TIdvDocumentSubmit = {
             services: {
                 idv: {
                     has_visual_sample: boolean;
-                    documents_supported: TDocumentsSupported;
+                    documents_supported: Record<string, { display_name: string; format: string }>;
                 };
             };
         };
     };
     is_from_external: boolean;
+};
+
+type TFormValues = {
+    error_message?: string;
+    document_type?: string;
+    document_number?: string;
 };
 
 const IdvDocumentSubmit = ({
@@ -38,7 +39,7 @@ const IdvDocumentSubmit = ({
     is_from_external,
 }: Partial<FormikProps<FormikValues>> & TIdvDocumentSubmit) => {
     const [document_list, setDocumentList] = React.useState<object[]>([]);
-    const [document_image, setDocumentImage] = React.useState(null);
+    const [document_image, setDocumentImage] = React.useState<string | null>(null);
     const [is_input_disable, setInputDisable] = React.useState(true);
     const [is_doc_selected, setDocSelected] = React.useState(false);
     const document_data = selected_country?.identity.services.idv.documents_supported;
@@ -60,7 +61,7 @@ const IdvDocumentSubmit = ({
 
         setDocumentList(
             filtered_documents.map(key => {
-                const { display_name, format } = document_data[key as keyof TDocumentsSupported];
+                const { display_name, format } = document_data[key];
                 const { new_display_name, example_format, sample_image } = getDocumentData(country_code, key) || {};
 
                 return {
@@ -77,6 +78,7 @@ const IdvDocumentSubmit = ({
     type TsetFieldValue = FormikHelpers<FormikValues>['setFieldValue'];
 
     const resetDocumentItemSelected = (setFieldValue: TsetFieldValue) => {
+        // debugger;
         setFieldValue(
             'document_type',
             {
@@ -91,12 +93,12 @@ const IdvDocumentSubmit = ({
         setDocumentImage(null);
     };
 
-    const initial_form_values = {
+    const initial_form_values: TFormValues = {
         document_type: '',
         document_number: '',
     };
 
-    const getDocument = ({ text }: FormikValues) => {
+    const getDocument = (text: FormikValues) => {
         return document_list.find((d: any) => d.text === text);
     };
 
@@ -104,17 +106,8 @@ const IdvDocumentSubmit = ({
         return example_format ? localize('Example: ') + example_format : '';
     };
 
-    type TError = {
-        error_message?: string;
-        document_type: string;
-        document_number: string;
-    };
-
-    const validateFields = ({ values }: FormikValues) => {
-        const errors: TError = {
-            document_type: '',
-            document_number: '',
-        };
+    const validateFields = (values: FormikValues) => {
+        const errors: TFormValues = {};
         const { document_type, document_number } = values;
 
         if (!document_type || !document_type.text || !document_type.value) {
@@ -137,7 +130,7 @@ const IdvDocumentSubmit = ({
         return errors;
     };
 
-    const submitHandler = (values: TError, { setSubmitting, setErrors }: FormikHelpers<TError>) => {
+    const submitHandler = (values: TFormValues, { setSubmitting, setErrors }: FormikHelpers<TFormValues>) => {
         setSubmitting(true);
         const { document_number, document_type }: FormikValues = values;
         const submit_data = {
@@ -176,6 +169,7 @@ const IdvDocumentSubmit = ({
                 | 'errors'
                 | 'handleBlur'
                 | 'handleChange'
+                | 'handleSubmit'
                 | 'isSubmitting'
                 | 'isValid'
                 | 'setFieldValue'
@@ -217,7 +211,13 @@ const IdvDocumentSubmit = ({
                                                             }
                                                         }}
                                                         onChange={handleChange}
-                                                        onItemSelection={({ item }: FormikValues) => {
+                                                        onItemSelection={(item: {
+                                                            id: string;
+                                                            text: string;
+                                                            value: string;
+                                                            sample_image: string;
+                                                            example_format: string;
+                                                        }) => {
                                                             if (item.text === 'No results found' || !item.text) {
                                                                 setDocSelected(false);
                                                                 resetDocumentItemSelected(setFieldValue);
@@ -289,11 +289,11 @@ const IdvDocumentSubmit = ({
                                             value={values?.document_number}
                                             onBlur={handleBlur}
                                             onChange={handleChange}
-                                            onKeyUp={(e: FormikValues) => {
+                                            onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
                                                 const { example_format } = values?.document_type;
                                                 const current_input: string = example_format.includes('-')
-                                                    ? formatInput(example_format, e.target.value, '-')
-                                                    : e.target.value;
+                                                    ? formatInput(example_format, e.currentTarget.value, '-')
+                                                    : e.currentTarget.value;
                                                 if (typeof setFieldValue === 'function') {
                                                     setFieldValue('document_number', current_input, true);
                                                 }
@@ -342,7 +342,7 @@ const IdvDocumentSubmit = ({
                         <Button
                             className='proof-of-identity__submit-button'
                             type='submit'
-                            onClick={handleSubmit}
+                            onClick={() => handleSubmit()}
                             has_effect
                             is_disabled={!dirty || isSubmitting || !isValid}
                             text={localize('Verify')}
