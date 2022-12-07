@@ -1062,15 +1062,11 @@
         .dc-btn {
             min-width: 12rem;
             height: 4rem;
-            width: 100%;
+            width: 50%;
             margin: 0 0 0.8rem;
 
             &:not(:last-child) {
                 margin-right: 0.6rem;
-            }
-
-            @include mobile {
-                min-width: 13rem;
             }
         }
     }
