@@ -1060,13 +1060,17 @@
         padding: 0.2rem 0.8rem 0;
 
         .dc-btn {
-            min-width: 12rem;
+            min-width: 50%;
             height: 4rem;
-            width: 50%;
-            margin: 0 0 0.8rem;
+            width: 100%;
+            margin: 0 0 0.8rem -0.2rem;
 
             &:not(:last-child) {
                 margin-right: 0.6rem;
+            }
+
+            @include mobile {
+                min-width: 50%;
             }
         }
     }
