@@ -40,45 +40,45 @@ export interface TFinancialDetails {
     ) => void;
     onCancel: (current_step: number, props: () => void) => void;
     validate: (values: FormikValues) => object;
-    income_source_enum: object | object[];
-    employment_status_enum: object | object[];
-    employment_industry_enum: object | object[];
-    occupation_enum: object | object[];
-    source_of_wealth_enum: object | object[];
-    education_level_enum: object | object[];
-    net_income_enum: object | object[];
-    estimated_worth_enum: object | object[];
-    account_turnover_enum: object | object[] | undefined;
-    forex_trading_experience_enum: object | object[];
-    forex_trading_frequency_enum: object | object[];
-    binary_options_trading_experience_enum: object | object[] | HTMLElement | undefined;
-    binary_options_trading_frequency_enum: object | object[];
-    cfd_trading_experience_enum: object | object[];
-    cfd_trading_frequency_enum: object | object[];
-    other_instruments_trading_experience_enum: object | object[];
-    other_instruments_trading_frequency_enum: object | object[];
+    income_source_enum: object[];
+    employment_status_enum: object[];
+    employment_industry_enum: object[];
+    occupation_enum: object[];
+    source_of_wealth_enum: object[];
+    education_level_enum: object[];
+    net_income_enum: object[];
+    estimated_worth_enum: object[];
+    account_turnover_enum: object[];
+    forex_trading_experience_enum: object[];
+    forex_trading_frequency_enum: object[];
+    binary_options_trading_experience_enum: object[];
+    binary_options_trading_frequency_enum: object[];
+    cfd_trading_experience_enum: object[];
+    cfd_trading_frequency_enum: object[];
+    other_instruments_trading_experience_enum: object[];
+    other_instruments_trading_frequency_enum: object[];
     value: object;
 }
 
 export type TFinancialInformationAndTradingExperience = {
     shared_props?: object;
-    income_source_enum: Array<object> | object;
-    employment_status_enum: Array<object> | object;
-    employment_industry_enum: Array<object> | object;
-    occupation_enum: Array<object> | object;
-    source_of_wealth_enum: Array<object> | object;
-    education_level_enum: Array<object> | object;
-    net_income_enum: Array<object> | object;
-    estimated_worth_enum: Array<object> | object;
-    account_turnover_enum?: Array<object> | object;
-    forex_trading_experience_enum: Array<object> | object;
-    forex_trading_frequency_enum: Array<object> | object;
-    binary_options_trading_experience_enum?: Array<object> | object | HTMLElement;
-    binary_options_trading_frequency_enum: Array<object> | object;
-    cfd_trading_experience_enum: Array<object> | object;
-    cfd_trading_frequency_enum: Array<object> | object;
-    other_instruments_trading_experience_enum: Array<object> | object;
-    other_instruments_trading_frequency_enum: Array<object> | object;
+    income_source_enum: object[];
+    employment_status_enum: object[];
+    employment_industry_enum: object[];
+    occupation_enum: object[];
+    source_of_wealth_enum: object[];
+    education_level_enum: object[];
+    net_income_enum: object[];
+    estimated_worth_enum: object[];
+    account_turnover_enum: object[];
+    forex_trading_experience_enum?: object[];
+    forex_trading_frequency_enum?: object[];
+    binary_options_trading_experience_enum?: object[];
+    binary_options_trading_frequency_enum?: object[];
+    cfd_trading_experience_enum?: object[];
+    cfd_trading_frequency_enum?: object[];
+    other_instruments_trading_experience_enum?: object[];
+    other_instruments_trading_frequency_enum?: object[];
 };
 
 const FinancialInformation = ({
@@ -184,7 +184,7 @@ const FinancialDetails = (props: TFinancialDetails) => {
 
                 return (
                     <AutoHeightWrapper default_height={200}>
-                        {({ setRef, height }: { setRef: (instance: HTMLFormElement) => void; height: any }) => (
+                        {({ setRef, height }: { setRef: (instance: HTMLFormElement) => void; height?: any }) => (
                             <form ref={setRef} onSubmit={handleSubmit}>
                                 <Div100vhContainer
                                     className='details-form'
@@ -223,6 +223,15 @@ const FinancialDetails = (props: TFinancialDetails) => {
                                                 other_instruments_trading_frequency_enum={
                                                     props.other_instruments_trading_frequency_enum
                                                 }
+                                                income_source_enum={[]}
+                                                employment_status_enum={[]}
+                                                employment_industry_enum={[]}
+                                                occupation_enum={[]}
+                                                source_of_wealth_enum={[]}
+                                                education_level_enum={[]}
+                                                net_income_enum={[]}
+                                                estimated_worth_enum={[]}
+                                                account_turnover_enum={[]}
                                             />
                                         </div>
                                     </ThemedScrollbars>
