@@ -23,8 +23,8 @@ type TUploader = {
     data: FormikValues;
     value: FormikValues;
     is_full: boolean;
-    has_frame: boolean;
-    onChange: (e: unknown) => void;
+    has_frame?: boolean;
+    onChange?: (e: unknown) => void;
 };
 
 const Message = ({ data, open }: FormikValues) => (
@@ -42,17 +42,16 @@ const Message = ({ data, open }: FormikValues) => (
     </div>
 );
 
-const Preview = ({
-    data,
-    setFieldValue,
-    value,
-    has_frame,
-    handleChange,
-}: Partial<FormikProps<FormikValues>> & TUploader) => {
+type TPreview = {
+    setFieldValue: FormikProps<FormikValues>['setFieldValue'];
+    handleChange: (file: object | null, setFieldValue?: FormikProps<FormikValues>['setFieldValue']) => void;
+};
+
+const Preview = ({ data, setFieldValue, value, has_frame, handleChange }: Partial<TUploader & TPreview>) => {
     const [background_url, setBackgroundUrl] = React.useState<string>();
 
     React.useEffect(() => {
-        setBackgroundUrl(value.file ? URL.createObjectURL(value.file) : '');
+        setBackgroundUrl(value?.file ? URL.createObjectURL(value?.file) : '');
     }, [value]);
 
     return (
@@ -64,11 +63,11 @@ const Preview = ({
                 style={{ backgroundImage: `url(${background_url})` }}
             >
                 {has_frame && <Icon icon='IcPoiFrame' className={`${ROOT_CLASS}__uploader-frame`} />}
-                {(!background_url || value.file.type.indexOf('pdf') !== -1) && (
+                {(!background_url || value?.file.type.indexOf('pdf') !== -1) && (
                     <React.Fragment>
                         <Icon icon='IcCloudUpload' size={50} />
                         <Text as='p' size='xs' color='general' align='center'>
-                            {value.file.name}
+                            {value?.file.name}
                         </Text>
                     </React.Fragment>
                 )}
@@ -76,15 +75,13 @@ const Preview = ({
                     icon='IcCloseCircle'
                     className={`${ROOT_CLASS}__uploader-remove`}
                     onClick={() => {
-                        if (handleChange && typeof handleChange === 'function') {
-                            handleChange(null, setFieldValue);
-                        }
+                        handleChange?.(null, setFieldValue);
                     }}
                     size={16}
                 />
             </div>
             <Text as='p' size='xs' color='general' align='center'>
-                {data.info}
+                {data?.info}
             </Text>
         </div>
     );
@@ -157,7 +154,7 @@ const Uploader = ({ data, value, is_full, onChange, has_frame }: TUploader) => {
                                     value={image}
                                     has_frame={has_frame}
                                     setFieldValue={setFieldValue}
-                                    handleChange={handleChange}
+                                    handleChange={() => handleChange()}
                                 />
                             )
                         }
@@ -167,6 +164,7 @@ const Uploader = ({ data, value, is_full, onChange, has_frame }: TUploader) => {
                         validation_error_message={value?.errors?.length ? ValidationErrorMessage : null}
                         noClick
                         value={image ? [image] : []}
+                        className=''
                     />
                 </div>
             )}
