@@ -23,8 +23,10 @@ type TUploader = {
     data: FormikValues;
     value: FormikValues;
     is_full: boolean;
-    has_frame?: boolean;
-    onChange?: (e: unknown) => void;
+    has_frame: boolean;
+    onChange: (e: unknown) => void;
+    setFieldValue: FormikProps<FormikValues>['setFieldValue'];
+    handleChange: (file: object | null, setFieldValue?: FormikProps<FormikValues>['setFieldValue']) => void;
 };
 
 const Message = ({ data, open }: FormikValues) => (
@@ -42,12 +44,7 @@ const Message = ({ data, open }: FormikValues) => (
     </div>
 );
 
-type TPreview = {
-    setFieldValue: FormikProps<FormikValues>['setFieldValue'];
-    handleChange: (file: object | null, setFieldValue?: FormikProps<FormikValues>['setFieldValue']) => void;
-};
-
-const Preview = ({ data, setFieldValue, value, has_frame, handleChange }: Partial<TUploader & TPreview>) => {
+const Preview = ({ data, setFieldValue, value, has_frame, handleChange }: Partial<TUploader>) => {
     const [background_url, setBackgroundUrl] = React.useState<string>();
 
     React.useEffect(() => {
@@ -87,18 +84,18 @@ const Preview = ({ data, setFieldValue, value, has_frame, handleChange }: Partia
     );
 };
 
-const Uploader = ({ data, value, is_full, onChange, has_frame }: TUploader) => {
+const Uploader = ({ data, value, is_full, onChange, has_frame }: Partial<TUploader>) => {
     const [image, setImage] = React.useState<{ errors?: [] }>();
 
     React.useEffect(() => {
         setImage(value);
     }, [value]);
 
-    const handleChange = (file: object, setFieldValue: FormikProps<FormikValues>['setFieldValue']) => {
+    const handleChange = (file?: object, setFieldValue?: FormikProps<FormikValues>['setFieldValue']) => {
         if (onChange && typeof onChange === 'function') {
             onChange(file);
         }
-        setFieldValue(data.name, file);
+        setFieldValue?.(data?.name, file);
     };
 
     const handleAccept = (files: object[], setFieldValue: () => void) => {
@@ -133,7 +130,7 @@ const Uploader = ({ data, value, is_full, onChange, has_frame }: TUploader) => {
     );
 
     return (
-        <Field name={data.name}>
+        <Field name={data?.name}>
             {({ form: { setFieldValue } }: FormikValues) => (
                 <div
                     className={classNames(`${ROOT_CLASS}__uploader`, {
