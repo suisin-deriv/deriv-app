@@ -161,7 +161,6 @@ const Uploader = ({ data, value, is_full, onChange, has_frame }: Partial<TUpload
                         validation_error_message={value?.errors?.length ? ValidationErrorMessage : null}
                         noClick
                         value={image ? [image] : []}
-                        className=''
                     />
                 </div>
             )}
