@@ -6,6 +6,7 @@ import React from 'react';
 
 const JurisdictionCardBack = ({ card_classname, toggleCardFlip, verification_docs }: TJurisdictionCardBackProps) => (
     <div
+        data-testid='dt_jurisdiction_card_back'
         className={classNames(`${card_classname}__card-content-container`, `${card_classname}__card-flipped-container`)}
     >
         <div>
