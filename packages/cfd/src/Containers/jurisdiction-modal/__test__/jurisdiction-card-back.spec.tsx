@@ -15,6 +15,12 @@ describe('<JurisdictionCardBack />', () => {
         verification_docs: [],
     };
 
+    const exampleVerificationMessage = () => {
+        expect(screen.getByText('Your document is pending for verification.')).toBeInTheDocument();
+        expect(screen.getByText('Verification failed. Resubmit during account creation.')).toBeInTheDocument();
+        expect(screen.getByText('Your document is verified.')).toBeInTheDocument();
+    };
+
     it('should render JurisdictionCardBack without any required submission if verification_docs is empty', () => {
         render(<JurisdictionCardBack {...mock_props} />);
         const container = screen.getByTestId('dt_jurisdiction_card_back');
@@ -33,9 +39,7 @@ describe('<JurisdictionCardBack />', () => {
         expect(
             screen.queryByText('A copy of your identity document (identity card, passport)')
         ).not.toBeInTheDocument();
-        expect(screen.getByText('Your document is pending for verification.')).toBeInTheDocument();
-        expect(screen.getByText('Verification failed. Resubmit during account creation.')).toBeInTheDocument();
-        expect(screen.getByText('Your document is verified.')).toBeInTheDocument();
+        exampleVerificationMessage();
     });
 
     it('should render JurisdictionCardBack display required document_number and name_and_address submission', () => {
@@ -52,9 +56,7 @@ describe('<JurisdictionCardBack />', () => {
                 'A recent utility bill (electricity, water or gas) or recent bank statement or government-issued letter with your name and address.'
             )
         ).toBeInTheDocument();
-        expect(screen.getByText('Your document is pending for verification.')).toBeInTheDocument();
-        expect(screen.getByText('Verification failed. Resubmit during account creation.')).toBeInTheDocument();
-        expect(screen.getByText('Your document is verified.')).toBeInTheDocument();
+        exampleVerificationMessage();
     });
 
     it('should render JurisdictionCardBack display required selfie, identity_document and name_and_address submission', () => {
@@ -68,9 +70,7 @@ describe('<JurisdictionCardBack />', () => {
                 'A recent utility bill (electricity, water or gas) or recent bank statement or government-issued letter with your name and address.'
             )
         ).toBeInTheDocument();
-        expect(screen.getByText('Your document is pending for verification.')).toBeInTheDocument();
-        expect(screen.getByText('Verification failed. Resubmit during account creation.')).toBeInTheDocument();
-        expect(screen.getByText('Your document is verified.')).toBeInTheDocument();
+        exampleVerificationMessage();
         expect(screen.queryByText('Document number (identity card, passport)')).not.toBeInTheDocument();
     });
 });
