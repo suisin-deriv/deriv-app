@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
-import useActiveWalletAccounts from './useActiveWalletAccounts';
+import useActiveWalletAccount from './useActiveWalletAccount';
 import useFetch from '../useFetch';
 
 /** A custom hook that gets the list created MT5 accounts of the user. */
 const useMT5LoginList = () => {
-    const { data: wallet } = useActiveWalletAccounts();
+    const { data: wallet } = useActiveWalletAccount();
 
     const { data: mt5_accounts, ...mt5_accounts_rest } = useFetch('mt5_login_list');
 
@@ -30,6 +30,9 @@ const useMT5LoginList = () => {
     return {
         /** The list of created MT5 accounts */
         data: modified_mt5_accounts,
+        eligible_to_migrate: {
+            synthetic: 'bvi',
+        },
         ...mt5_accounts_rest,
     };
 };

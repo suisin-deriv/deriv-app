@@ -300,6 +300,7 @@ export const icons =
         'IcBotBuilderArrow',
         'IcBotBuilderTabIcon',
         'IcBotBuilder',
+        'IcBotStop',
         'IcBox',
         'IcButtonBack',
         'IcCalendarDatefrom',
@@ -728,7 +729,7 @@ export const icons =
         'IcMt5SyntheticPlatform',
         'IcMt5TradeTypes',
         'IcMt5VanuatuDerived',
-        'IcMt5VanuatuFinancial',
+        'IcMt5VanuatuFinancial'
     ],
     'option': [
         'IcOptionAccumulators',
