@@ -1,10 +1,19 @@
 import React from 'react';
-
-import { Checkbox, Text, StaticUrl } from '@deriv/components';
+import { Button, Checkbox, Modal, Text, StaticUrl } from '@deriv/components';
 import { Localize } from '@deriv/translations';
 import getMigrationModalDetails from '../../Constants/mt5-migration-modal-content';
 
-const MT5MigrationBackSideContent = ({ to_account }: { to_account: string }) => {
+type TMT5MigrationBackSideContentProps = {
+    to_account: string;
+    setShowModalFrontSide: (value: boolean) => void;
+    onConfirmMigration: () => void;
+};
+
+const MT5MigrationBackSideContent = ({
+    to_account,
+    setShowModalFrontSide,
+    onConfirmMigration,
+}: TMT5MigrationBackSideContentProps) => {
     const [is_checked, setIsChecked] = React.useState(false);
     const content = getMigrationModalDetails(to_account);
     return (
@@ -37,9 +46,9 @@ const MT5MigrationBackSideContent = ({ to_account }: { to_account: string }) => 
                     <div className='mt5-migration-modal__existing-accounts-card-content'>
                         <Checkbox
                             value={is_checked}
-                            onChange={() => setIsChecked(true)}
+                            onChange={() => setIsChecked(!is_checked)}
                             label={
-                                <Text as='p' size={'xs'} line_height='xs'>
+                                <Text as='p' size='xs' line_height='xs'>
                                     <Localize
                                         i18n_default_text='I agree to move my MT5 account(s) and agree to Deriv BVI Ltd’s <0>terms and conditions</0>'
                                         components={[
@@ -53,6 +62,15 @@ const MT5MigrationBackSideContent = ({ to_account }: { to_account: string }) => 
                     </div>
                 </div>
             </div>
+            <Modal.Footer has_separator>
+                <Button type='button' large secondary onClick={() => setShowModalFrontSide(true)}>
+                    <Localize i18n_default_text='Back' />
+                </Button>
+
+                <Button type='button' large primary onClick={onConfirmMigration} disabled={!is_checked}>
+                    <Localize i18n_default_text='Next' />
+                </Button>
+            </Modal.Footer>
         </React.Fragment>
     );
 };
