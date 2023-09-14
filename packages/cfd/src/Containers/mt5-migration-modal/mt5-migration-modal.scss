@@ -1,3 +1,43 @@
+// .mt5-migration-modal {
+//     &__description {
+//         margin: 3.2rem 2.4rem 0;
+//     }
+//     &__migration_content {
+//         margin: 3.2rem 15rem;
+//         display: grid;
+//         grid-template-columns: 1fr;
+//         grid-gap: 1.6rem;
+//         &-items {
+//             display: grid;
+//             grid-template-columns: repeat(3, 1fr);
+//             grid-gap: 10px;
+//             justify-items: center;
+//             align-items: center;
+//         }
+//     }
+//     &__existing-accounts {
+//         margin: 3.2rem 2.4rem;
+//         display: grid;
+//         grid-template-columns: 1fr 1fr;
+//         grid-gap: 1.6rem;
+
+//         &-card {
+//             height: 29.6rem;
+//             width: 26.2rem;
+//             background-color: $color-grey-2;
+//             border-radius: $BORDER-RADIUS * 2;
+//             &-content {
+//                 margin: 1.6rem;
+//             }
+//         }
+//     }
+// }
+
+// .dc-modal__container_mt5-migration-modal {
+//     .dc-modal-header {
+//         border-bottom: 2px solid var(--general-section-1);
+//     }
+// }
 .mt5-migration-modal {
     &__mobile-header {
         margin: 1.6rem;
@@ -57,6 +97,16 @@
                 width: 32.8rem;
                 height: auto;
             }
+            @include mobile {
+                width: 32.8rem;
+                height: auto;
+            }
+        }
+        @include mobile {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         @include mobile {
             display: flex;
@@ -84,5 +134,15 @@
         .dc-btn {
             width: 100%;
         }
+    }
+}
+
+.dc-mobile-dialog__mt5-migration-modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+    .dc-modal-footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
     }
 }

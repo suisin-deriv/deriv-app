@@ -399,6 +399,7 @@ import './common/ic-gear.svg';
 import './common/ic-get-platform.svg';
 import './common/ic-google-drive-dbot.svg';
 import './common/ic-google-drive.svg';
+import './common/ic-green-arrow-check.svg';
 import './common/ic-hamburger-white.svg';
 import './common/ic-hamburger.svg';
 import './common/ic-help-centre.svg';

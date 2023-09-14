@@ -408,6 +408,7 @@ export const icons =
         'IcGetPlatform',
         'IcGoogleDriveDbot',
         'IcGoogleDrive',
+        'IcGreenArrowCheck',
         'IcHamburgerWhite',
         'IcHamburger',
         'IcHelpCentre',
