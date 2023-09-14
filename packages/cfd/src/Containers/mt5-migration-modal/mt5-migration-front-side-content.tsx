@@ -3,12 +3,14 @@ import { Button, Modal, Text } from '@deriv/components';
 import { useMT5SVGEligibleToMigrate } from '@deriv/hooks';
 import { Localize } from '@deriv/translations';
 import MT5MigrationAccountIcons from './mt5-migration-account-icons';
+import { observer, useStore } from '@deriv/stores';
 
 type TMT5MigrationFrontSideContentProps = {
     setShowModalFrontSide: (value: boolean) => void;
 };
 
-const MT5MigrationFrontSideContent = ({ setShowModalFrontSide }: TMT5MigrationFrontSideContentProps) => {
+const MT5MigrationFrontSideContent = observer(({ setShowModalFrontSide }: TMT5MigrationFrontSideContentProps) => {
+    const { ui } = useStore();
     const {
         eligible_account_to_migrate,
         eligible_svg_to_bvi_derived_accounts,
@@ -16,11 +18,13 @@ const MT5MigrationFrontSideContent = ({ setShowModalFrontSide }: TMT5MigrationFr
         eligible_svg_to_vanuatu_derived_accounts,
         eligible_svg_to_vanuatu_financial_accounts,
     } = useMT5SVGEligibleToMigrate();
+    const { is_mobile } = ui;
+    const content_size = is_mobile ? 'xs' : 's';
 
     return (
         <React.Fragment>
             <div className='mt5-migration-modal__description'>
-                <Text as='p' color='general' size='s' align='center'>
+                <Text as='p' size={content_size} align='center'>
                     <Localize
                         i18n_default_text='We’re upgrading your SVG account(s) by moving them to the {{eligible_account_to_migrate}} jurisdiction.'
                         values={{
@@ -44,7 +48,7 @@ const MT5MigrationFrontSideContent = ({ setShowModalFrontSide }: TMT5MigrationFr
                 </div>
             </div>
             <div>
-                <Text as='p' align='center'>
+                <Text as='p' size={content_size} align='center'>
                     <Localize
                         i18n_default_text='Click <0>Next</0> to start your transition.'
                         components={[<strong key={0} />]}
@@ -58,5 +62,5 @@ const MT5MigrationFrontSideContent = ({ setShowModalFrontSide }: TMT5MigrationFr
             </Modal.Footer>
         </React.Fragment>
     );
-};
+});
 export default MT5MigrationFrontSideContent;

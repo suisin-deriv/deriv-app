@@ -1,5 +1,13 @@
 import React from 'react';
-import { Modal, UILoader } from '@deriv/components';
+import {
+    Modal,
+    UILoader,
+    DesktopWrapper,
+    MobileWrapper,
+    PageOverlay,
+    Div100vhContainer,
+    Text,
+} from '@deriv/components';
 import { Localize } from '@deriv/translations';
 import { observer, useStore } from '@deriv/stores';
 import { CFD_PLATFORMS, Jurisdiction } from '@deriv/shared';
@@ -26,7 +34,11 @@ const MT5MigrationModal = observer(({ openPasswordModal }: TMT5MigrationModalPro
 
     const [show_modal_front_side, setShowModalFrontSide] = React.useState(true);
 
-    const modal_title = <Localize i18n_default_text='Enhancing your trading experience' />;
+    const modal_title = (
+        <Text size='xs' weight='bold'>
+            <Localize i18n_default_text='Enhancing your trading experience' />
+        </Text>
+    );
 
     React.useEffect(() => {
         if (has_svg_accounts_to_migrate) {
@@ -54,27 +66,50 @@ const MT5MigrationModal = observer(({ openPasswordModal }: TMT5MigrationModalPro
     return (
         <div>
             <React.Suspense fallback={<UILoader />}>
-                <Modal
-                    className='mt5-migration-modal'
-                    disableApp={disableApp}
-                    enableApp={enableApp}
-                    exit_classname='cfd-modal--custom-exit'
-                    is_open={is_mt5_migration_modal_open}
-                    title={modal_title}
-                    toggleModal={toggleMT5MigrationModal}
-                    width='58.8rem'
-                    height={getModalHeight()}
-                >
-                    {show_modal_front_side ? (
-                        <MT5MigrationFrontSideContent setShowModalFrontSide={setShowModalFrontSide} />
-                    ) : (
-                        <MT5MigrationBackSideContent
-                            to_account={eligible_account_to_migrate}
-                            setShowModalFrontSide={setShowModalFrontSide}
-                            onConfirmMigration={onConfirmMigration}
-                        />
-                    )}
-                </Modal>
+                <DesktopWrapper>
+                    <Modal
+                        className='mt5-migration-modal'
+                        disableApp={disableApp}
+                        enableApp={enableApp}
+                        exit_classname='cfd-modal--custom-exit'
+                        is_open={is_mt5_migration_modal_open}
+                        title={modal_title}
+                        toggleModal={toggleMT5MigrationModal}
+                        width='58.8rem'
+                        height={getModalHeight()}
+                    >
+                        {show_modal_front_side ? (
+                            <MT5MigrationFrontSideContent setShowModalFrontSide={setShowModalFrontSide} />
+                        ) : (
+                            <MT5MigrationBackSideContent
+                                to_account={eligible_account_to_migrate}
+                                setShowModalFrontSide={setShowModalFrontSide}
+                                onConfirmMigration={onConfirmMigration}
+                            />
+                        )}
+                    </Modal>
+                </DesktopWrapper>
+                <MobileWrapper>
+                    <PageOverlay
+                        is_open={is_mt5_migration_modal_open}
+                        header_classname='mt5-migration-modal__mobile-header'
+                        portal_id='deriv_app'
+                        header={modal_title}
+                        onClickClose={toggleMT5MigrationModal}
+                    >
+                        <Div100vhContainer className='mt5-migration-modal__mobile-container'>
+                            {show_modal_front_side ? (
+                                <MT5MigrationFrontSideContent setShowModalFrontSide={setShowModalFrontSide} />
+                            ) : (
+                                <MT5MigrationBackSideContent
+                                    to_account={eligible_account_to_migrate}
+                                    setShowModalFrontSide={setShowModalFrontSide}
+                                    onConfirmMigration={onConfirmMigration}
+                                />
+                            )}
+                        </Div100vhContainer>
+                    </PageOverlay>
+                </MobileWrapper>
             </React.Suspense>
         </div>
     );

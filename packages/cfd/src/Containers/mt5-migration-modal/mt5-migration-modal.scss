@@ -1,6 +1,13 @@
 .mt5-migration-modal {
+    &__mobile-header {
+        margin: 1.6rem;
+        text-align: unset;
+    }
     &__description {
-        margin: 3.2rem 2.4rem 0;
+        margin: 3.2rem 2.4rem;
+        @include mobile {
+            margin: 1.6rem;
+        }
     }
     &__migration_content {
         margin: 3.2rem 15rem;
@@ -10,8 +17,18 @@
         &-items {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            grid-gap: 10px;
+            grid-gap: 1rem;
             justify-items: center;
+            align-items: center;
+
+            @include mobile {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+        @include mobile {
+            display: flex;
+            justify-content: center;
             align-items: center;
         }
     }
@@ -28,13 +45,44 @@
             border-radius: $BORDER-RADIUS * 2;
             &-content {
                 margin: 1.6rem;
+                display: flex;
+                flex-direction: column;
+                gap: 1.6rem;
+                &__message {
+                    display: flex;
+                    gap: 0.5rem;
+                }
             }
+            @include mobile {
+                width: 32.8rem;
+                height: auto;
+            }
+        }
+        @include mobile {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
     }
 }
 
 .dc-modal__container_mt5-migration-modal {
     .dc-modal-header {
-        border-bottom: 2px solid var(--general-section-1);
+        border-bottom: 0.2rem solid var(--general-section-1);
+    }
+}
+
+.mt5-migration-modal__mobile-container {
+    overflow-x: hidden;
+    overflow-y: auto;
+    .dc-modal-footer {
+        position: fixed;
+        bottom: 4rem;
+        width: 100%;
+
+        .dc-btn {
+            width: 100%;
+        }
     }
 }

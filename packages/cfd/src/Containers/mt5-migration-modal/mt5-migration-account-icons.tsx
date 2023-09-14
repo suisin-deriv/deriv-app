@@ -1,12 +1,15 @@
 import React from 'react';
 import { Icon } from '@deriv/components';
+import { observer, useStore } from '@deriv/stores';
 
 type TMT5MigrationAccountIconsProps = {
     to: string;
     type: string;
 };
 
-const MT5MigrationAccountIcons = ({ to, type }: TMT5MigrationAccountIconsProps) => {
+const MT5MigrationAccountIcons = observer(({ to, type }: TMT5MigrationAccountIconsProps) => {
+    const { ui } = useStore();
+    const { is_mobile } = ui;
     const getFromAccountIcon = () => {
         switch (type) {
             case 'derived':
@@ -35,11 +38,11 @@ const MT5MigrationAccountIcons = ({ to, type }: TMT5MigrationAccountIconsProps) 
 
     return (
         <React.Fragment>
-            <Icon icon={getFromAccountIcon()} height={99} width={96} />
-            <Icon icon='IcLongArrowRight' height={24} width={24} />
-            <Icon icon={getToAccountIcon(`${to}_${type}`)} height={99} width={96} />
+            <Icon icon={getFromAccountIcon()} size={96} />
+            <Icon icon={is_mobile ? 'IcLongArrowDown' : 'IcLongArrowRight'} size={24} />
+            <Icon icon={getToAccountIcon(`${to}_${type}`)} size={96} />
         </React.Fragment>
     );
-};
+});
 
 export default MT5MigrationAccountIcons;
