@@ -1,8 +1,7 @@
 import React from 'react';
-import { Button, Checkbox, Modal, Text, StaticUrl } from '@deriv/components';
+import { Button, Checkbox, Modal, Text, StaticUrl, Icon } from '@deriv/components';
 import { Localize } from '@deriv/translations';
 import getMigrationModalDetails from '../../Constants/mt5-migration-modal-content';
-import Icon from '@deriv/components/src/components/icon/icon';
 import { observer, useStore } from '@deriv/stores';
 
 type TMT5MigrationBackSideContentProps = {
