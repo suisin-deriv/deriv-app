@@ -201,3 +201,8 @@ export type TIDVFormValues = {
     document_additional?: string;
     error_message?: string;
 };
+
+export type TAutoComplete = {
+    value: boolean;
+    text: string;
+};

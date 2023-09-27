@@ -96,7 +96,7 @@ export const generatePlaceholderText = (selected_doc: string) => {
 };
 
 export const validate =
-    (errors: Record<string, string>, values: Record<string, string>) =>
+    (errors: Record<string, string | undefined>, values: Record<string, string>) =>
     (fn: (value: string) => string, arr: string[], err_msg: string) => {
         arr.forEach(field => {
             const value = values[field];
