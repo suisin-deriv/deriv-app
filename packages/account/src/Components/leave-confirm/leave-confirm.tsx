@@ -109,7 +109,7 @@ export const TransitionBlocker = ({ dirty, onDirty }: TTransitionBlocker) => {
 };
 export const TransitionBlockerWithRouter = withRouter(TransitionBlocker);
 
-const LeaveConfirm = ({ onDirty }: { onDirty: (prop: boolean) => void }) => (
+const LeaveConfirm = ({ onDirty }: { onDirty: ((prop: boolean) => void) | null }) => (
     <FormikConsumer>
         {formik => <TransitionBlockerWithRouter onDirty={onDirty} dirty={formik.dirty && formik.submitCount === 0} />}
     </FormikConsumer>
