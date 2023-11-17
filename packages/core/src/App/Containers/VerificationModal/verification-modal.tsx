@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { DesktopWrapper, MobileDialog, MobileWrapper, Modal, UILoader } from '@deriv/components';
 import { observer, useStore } from '@deriv/stores';
 import VerificationModalContent from './verification-modal-content';
-
+import { useLocation } from 'react-router-dom';
 import './verification-modal.scss';
 import { localize } from '@deriv/translations';
+import { routes } from '@deriv/shared';
 
 const VerificationModal = observer(() => {
     const { ui } = useStore();
     const { is_verification_modal_visible, setIsVerificationModalVisible, setIsVerificationSubmitted } = ui;
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        if (pathname === routes.proof_of_address) {
+            setIsVerificationModalVisible(false);
+        }
+    }, [pathname, setIsVerificationModalVisible]);
 
     return (
         <React.Suspense fallback={<UILoader />}>
